@@ -412,7 +412,7 @@ Monthly costs (us-east-1, 2 tasks running 24/7):
 Test your FastMCP server locally before deployment:
 
 ```bash
-cd app
+cd mcp
 pip install -r requirements.txt
 python server.py
 ```
