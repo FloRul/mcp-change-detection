@@ -107,6 +107,7 @@ jobs:
           terraform plan \
             -var="aws_region=${{ env.AWS_REGION }}" \
             -var="environment=${{ github.event.inputs.environment || 'production' }}" \
+            -var="mcp_server_name=${{ env.ECR_REPO_NAME }}" \
             -out=tfplan
 
       - name: Terraform Apply

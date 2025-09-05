@@ -98,20 +98,8 @@ resource "aws_ecs_task_definition" "mcp_server" {
   }
 }
 
-# ECR Repository
-resource "aws_ecr_repository" "mcp_server" {
-  name                 = "${var.project_name}-repo"
-  image_tag_mutability = "MUTABLE"
-  force_delete         = true
-
-  image_scanning_configuration {
-    scan_on_push = true
-  }
-
-  tags = {
-    Name        = "${var.project_name}-ecr"
-    Environment = var.environment
-  }
+data "aws_ecr_repository" "mcp_server" {
+  name = var.mcp_server_name
 }
 
 # IAM Roles
