@@ -1,0 +1,59 @@
+﻿name: Validate and Test
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+    paths:
+      - "app/**"
+      - "terraform/**"
+      - ".github/workflows/**"
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  validate-terraform:
+    name: Validate Terraform
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+
+      - name: Terraform Init
+        working-directory: ./terraform
+        run: terraform init -backend=false
+
+      - name: Terraform Format Check
+        working-directory: ./terraform
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Validate
+        working-directory: ./terraform
+        run: terraform validate
+
+  test-docker-build:
+    name: Test Docker Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        working-directory: ./app
+        run: docker build -t mcp-server:test .
+
+      - name: Run container test
+        run: |
+          docker run -d -p 8000:8000 --name mcp-test mcp-server:test
+          sleep 10
+          curl -f http://localhost:8000/health || exit 1
+          docker stop mcp-test

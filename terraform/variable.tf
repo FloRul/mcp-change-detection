@@ -7,83 +7,54 @@
 variable "project_name" {
   description = "Project name for resource naming"
   type        = string
-  default     = "fastmcp-server"
+  default     = "mcp-server"
 }
 
 variable "environment" {
-  description = "Environment name (dev, staging, prod)"
+  description = "Environment name"
   type        = string
-  default     = "prod"
+  default     = "production"
 }
 
 variable "container_port" {
-  description = "Port that the container listens on"
+  description = "Port the container listens on"
   type        = number
   default     = 8000
 }
 
-variable "cpu" {
-  description = "Fargate CPU units (256, 512, 1024, 2048, 4096)"
+variable "task_cpu" {
+  description = "CPU units for the task (256, 512, 1024, 2048, 4096)"
   type        = string
-  default     = "512"
+  default     = "256"
 }
 
-variable "memory" {
-  description = "Fargate memory in MB"
+variable "task_memory" {
+  description = "Memory for the task in MB (512, 1024, 2048, etc.)"
   type        = string
-  default     = "1024"
+  default     = "512"
 }
 
 variable "desired_count" {
   description = "Number of tasks to run"
   type        = number
-  default     = 2
-}
-
-variable "min_capacity" {
-  description = "Minimum number of tasks for auto-scaling"
-  type        = number
   default     = 1
-}
-
-variable "max_capacity" {
-  description = "Maximum number of tasks for auto-scaling"
-  type        = number
-  default     = 10
 }
 
 variable "mcp_auth_token" {
   description = "Bearer token for MCP authentication"
   type        = string
   sensitive   = true
-}
-
-variable "health_check_path" {
-  description = "Health check endpoint path"
-  type        = string
-  default     = "/health"
-}
-
-variable "mcp_path" {
-  description = "MCP endpoint path"
-  type        = string
-  default     = "/mcp/"
-}
-
-variable "certificate_arn" {
-  description = "ACM certificate ARN for HTTPS (optional)"
-  type        = string
   default     = ""
 }
 
-variable "domain_name" {
-  description = "Domain name for the MCP server (optional)"
+variable "mcp_server_name" {
+  description = "Name for the MCP server"
   type        = string
-  default     = ""
+  default     = "Remote MCP Server"
 }
 
-variable "route53_zone_id" {
-  description = "Route53 hosted zone ID (optional)"
+variable "availability_zone" {
+  description = "Availability zone for the subnet"
   type        = string
-  default     = ""
+  default     = "us-east-1a"
 }
