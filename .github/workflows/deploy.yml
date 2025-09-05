@@ -56,9 +56,9 @@ jobs:
       - name: Create ECR repository if it doesn't exist
         if: steps.check-ecr.outputs.exists == 'false'
         run: |
-          aws ecr create-repository 
-            --repository-name ${{ env.ECR_REPO_NAME }} 
-            --image-scanning-configuration scanOnPush=true 
+          aws ecr create-repository \
+            --repository-name ${{ env.ECR_REPO_NAME }} \
+            --image-scanning-configuration scanOnPush=true \
             --region ${{ env.AWS_REGION }}
 
       - name: Build, tag, and push Docker image
@@ -104,9 +104,9 @@ jobs:
       - name: Terraform Plan
         working-directory: ./terraform
         run: |
-          terraform plan 
-            -var="aws_region=${{ env.AWS_REGION }}" 
-            -var="environment=${{ github.event.inputs.environment || 'production' }}" 
+          terraform plan \
+            -var="aws_region=${{ env.AWS_REGION }}" \
+            -var="environment=${{ github.event.inputs.environment || 'production' }}" \
             -out=tfplan
 
       - name: Terraform Apply
@@ -135,17 +135,17 @@ jobs:
 
       - name: Force new deployment
         run: |
-          aws ecs update-service 
-            --cluster ${{ needs.deploy-infrastructure.outputs.cluster-name }} 
-            --service ${{ needs.deploy-infrastructure.outputs.service-name }} 
-            --force-new-deployment 
+          aws ecs update-service \
+            --cluster ${{ needs.deploy-infrastructure.outputs.cluster-name }} \
+            --service ${{ needs.deploy-infrastructure.outputs.service-name }} \
+            --force-new-deployment \
             --region ${{ env.AWS_REGION }}
 
       - name: Wait for service to stabilize
         run: |
-          aws ecs wait services-stable 
-            --cluster ${{ needs.deploy-infrastructure.outputs.cluster-name }} 
-            --services ${{ needs.deploy-infrastructure.outputs.service-name }} 
+          aws ecs wait services-stable \
+            --cluster ${{ needs.deploy-infrastructure.outputs.cluster-name }} \
+            --services ${{ needs.deploy-infrastructure.outputs.service-name }} \
             --region ${{ env.AWS_REGION }}
 
   get-deployment-info:
@@ -166,27 +166,27 @@ jobs:
         run: |
           # Get task ARN
           TASK_ARN=$(aws ecs list-tasks 
-            --cluster ${{ needs.deploy-infrastructure.outputs.cluster-name }} 
-            --service-name ${{ needs.deploy-infrastructure.outputs.service-name }} 
-            --region ${{ env.AWS_REGION }} 
-            --query 'taskArns[0]' 
+            --cluster ${{ needs.deploy-infrastructure.outputs.cluster-name }} \
+            --service-name ${{ needs.deploy-infrastructure.outputs.service-name }} \
+            --region ${{ env.AWS_REGION }} \
+            --query 'taskArns[0]' \
             --output text)
 
           if [ "$TASK_ARN" != "None" ] && [ ! -z "$TASK_ARN" ]; then
             # Get ENI ID
-            ENI_ID=$(aws ecs describe-tasks 
-              --cluster ${{ needs.deploy-infrastructure.outputs.cluster-name }} 
-              --tasks $TASK_ARN 
-              --region ${{ env.AWS_REGION }} 
-              --query 'tasks[0].attachments[0].details[?name==`networkInterfaceId`].value' 
+            ENI_ID=$(aws ecs describe-tasks \
+              --cluster ${{ needs.deploy-infrastructure.outputs.cluster-name }} \
+              --tasks $TASK_ARN \
+              --region ${{ env.AWS_REGION }} \
+              --query 'tasks[0].attachments[0].details[?name==`networkInterfaceId`].value' \
               --output text)
             
             if [ "$ENI_ID" != "None" ] && [ ! -z "$ENI_ID" ]; then
               # Get public IP
-              PUBLIC_IP=$(aws ec2 describe-network-interfaces 
-                --network-interface-ids $ENI_ID 
-                --region ${{ env.AWS_REGION }} 
-                --query 'NetworkInterfaces[0].Association.PublicIp' 
+              PUBLIC_IP=$(aws ec2 describe-network-interfaces \
+                --network-interface-ids $ENI_ID \
+                --region ${{ env.AWS_REGION }} \
+                --query 'NetworkInterfaces[0].Association.PublicIp' \
                 --output text)
               
               echo "public-ip=$PUBLIC_IP" >> $GITHUB_OUTPUT
