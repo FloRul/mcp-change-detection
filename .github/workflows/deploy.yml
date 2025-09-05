@@ -166,7 +166,7 @@ jobs:
         id: get-ip
         run: |
           # Get task ARN
-          TASK_ARN=$(aws ecs list-tasks 
+          TASK_ARN=$(aws ecs list-tasks \
             --cluster ${{ needs.deploy-infrastructure.outputs.cluster-name }} \
             --service-name ${{ needs.deploy-infrastructure.outputs.service-name }} \
             --region ${{ env.AWS_REGION }} \
