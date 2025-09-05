@@ -30,4 +30,4 @@ async def health_check(request):
 
 
 # Create ASGI application for production deployment
-app = mcp.http_app()
+app = mcp.http_app(transport="streamable-http")

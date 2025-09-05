@@ -72,7 +72,6 @@ resource "aws_ecs_task_definition" "mcp_server" {
           value = var.mcp_server_name
         }
       ]
-
       logConfiguration = {
         logDriver = "awslogs"
         options = {
