@@ -82,13 +82,13 @@ resource "aws_ecs_task_definition" "mcp_server" {
         }
       }
 
-      # healthCheck = {
-      #   command     = ["CMD-SHELL", "curl -f http://localhost:${var.container_port}/health || exit 1"]
-      #   interval    = 30
-      #   timeout     = 5
-      #   retries     = 3
-      #   startPeriod = 60
-      # }
+      healthCheck = {
+        command     = ["CMD-SHELL", "curl -f http://0.0.0.0:${var.container_port}/health || exit 1"]
+        interval    = 30
+        timeout     = 5
+        retries     = 3
+        startPeriod = 60
+      }
     }
   ])
 
