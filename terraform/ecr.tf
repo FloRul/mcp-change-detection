@@ -55,7 +55,7 @@ resource "aws_ecs_task_definition" "mcp_server" {
   container_definitions = jsonencode([
     {
       name  = var.project_name
-      image = "${aws_ecr_repository.mcp_server.repository_url}:latest"
+      image = "${data.aws_ecr_repository.mcp_server.repository_url}:latest"
 
       essential = true
 

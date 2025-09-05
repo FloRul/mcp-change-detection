@@ -50,11 +50,11 @@ variable "mcp_auth_token" {
 variable "mcp_server_name" {
   description = "Name for the MCP server"
   type        = string
-  default     = "Remote MCP Server"
+  nullable    = false
 }
 
 variable "availability_zone" {
   description = "Availability zone for the subnet"
   type        = string
-  default     = "us-east-1a"
+  default     = "ca-central-1a"
 }
