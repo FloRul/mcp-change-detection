@@ -80,14 +80,20 @@ resource "aws_ecs_task_definition" "mcp_server" {
           "awslogs-stream-prefix" = "ecs"
         }
       }
-
       healthCheck = {
-        command     = ["CMD-SHELL", "curl -f http://localhost:${var.container_port}/health || exit 1"]
+        command     = ["CMD-SHELL", "python -c 'import http.client; conn = http.client.HTTPConnection(\"localhost\", ${var.container_port}); conn.request(\"GET\", \"/health\"); exit(0) if conn.getresponse().status == 200 else exit(1)'"]
         interval    = 30
         timeout     = 5
         retries     = 3
         startPeriod = 60
       }
+      # healthCheck = {
+      #   command     = ["CMD-SHELL", "curl -f http://localhost:${var.container_port}/health || exit 1"]
+      #   interval    = 30
+      #   timeout     = 5
+      #   retries     = 3
+      #   startPeriod = 60
+      # }
     }
   ])
 
