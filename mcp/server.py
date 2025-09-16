@@ -3,7 +3,6 @@ from fastmcp import FastMCP
 from fastmcp.server.auth.providers.azure import AzureProvider
 
 auth_provider = AzureProvider(
-    
     required_scopes=[
         "User.Read",
         "email",
@@ -57,4 +56,4 @@ async def health_check(request):
     return JSONResponse({"status": "healthy", "service": "mcp-server"})
 
 
-app = mcp.http_app(transport="streamable-http")
+app = mcp.http_app(transport="streamable-http", stateless_http=True)
