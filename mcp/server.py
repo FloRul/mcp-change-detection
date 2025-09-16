@@ -18,9 +18,9 @@ def get_azure_credentials():
 credentials = get_azure_credentials()
 
 auth_provider = AzureProvider(
-    client_id=credentials["client_id"],
-    client_secret=credentials["client_secret"],
-    tenant_id=credentials["tenant_id"],
+    client_id=credentials["FASTMCP_SERVER_AUTH_AZURE_CLIENT_ID"],
+    client_secret=credentials["FASTMCP_SERVER_AUTH_AZURE_CLIENT_SECRET"],
+    tenant_id=credentials["FASTMCP_SERVER_AUTH_AZURE_TENANT_ID"],
     required_scopes=[
         "User.Read",
         "email",
