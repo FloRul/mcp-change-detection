@@ -73,4 +73,5 @@ async def health_check(request):
     return JSONResponse({"status": "healthy", "service": "mcp-server"})
 
 
-app = mcp.http_app(transport="streamable-http", stateless_http=True)
+if __name__ == "__main__":
+    mcp.run(transport="http", host="0.0.0.0", port=8000)
