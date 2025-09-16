@@ -70,6 +70,14 @@ resource "aws_ecs_task_definition" "mcp_server" {
         {
           name  = "MCP_SERVER_NAME"
           value = var.mcp_server_name
+        },
+        {
+          name  = "SECRET_NAME"
+          value = aws_secretsmanager_secret.azure_credentials.id
+        },
+        {
+          name  = "AWS_REGION"
+          value = var.aws_region
         }
       ]
       logConfiguration = {
@@ -155,4 +163,20 @@ resource "aws_iam_role" "ecs_task" {
     Name        = "${var.project_name}-ecs-task-role"
     Environment = var.environment
   }
+}
+
+resource "aws_iam_role_policy" "ecs_task_secrets_policy" {
+  name = "${var.project_name}-secrets-policy"
+  role = aws_iam_role.ecs_task.name
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect   = "Allow"
+        Action   = "secretsmanager:GetSecretValue"
+        Resource = aws_secretsmanager_secret.azure_credentials.arn
+      }
+    ]
+  })
 }

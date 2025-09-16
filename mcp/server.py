@@ -2,14 +2,31 @@
 from fastmcp import FastMCP
 from fastmcp.server.auth.providers.azure import AzureProvider
 
+import boto3
+
+SECRETS_NAME = os.environ.get("SECRET_NAME", "azure_credentials")
+REGION = os.environ.get("AWS_REGION", "ca-central-1")
+
+
+def get_azure_credentials():
+    client = boto3.client("secretsmanager", region_name=REGION)
+    response = client.get_secret_value(SecretId=SECRETS_NAME)
+    secret = response["SecretString"]
+    return eval(secret)
+
+
+credentials = get_azure_credentials()
+
 auth_provider = AzureProvider(
+    client_id=credentials["client_id"],
+    client_secret=credentials["client_secret"],
+    tenant_id=credentials["tenant_id"],
     required_scopes=[
         "User.Read",
         "email",
         "openid",
         "profile",
-    ],  # Microsoft Graph permissions
-    # redirect_path="/auth/callback"                  # Default value, customize if needed
+    ],  # Default value, customize if needed
 )
 
 # Read configuration from environment
