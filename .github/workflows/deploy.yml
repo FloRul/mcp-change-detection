@@ -142,13 +142,6 @@ jobs:
             --force-new-deployment \
             --region ${{ env.AWS_REGION }}
 
-      - name: Wait for service to stabilize
-        run: |
-          aws ecs wait services-stable \
-            --cluster ${{ needs.deploy-infrastructure.outputs.cluster-name }} \
-            --services ${{ needs.deploy-infrastructure.outputs.service-name }} \
-            --region ${{ env.AWS_REGION }}
-
   get-deployment-info:
     name: Get Deployment Information
     runs-on: ubuntu-latest
