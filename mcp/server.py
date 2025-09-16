@@ -17,38 +17,39 @@ def get_azure_credentials():
 
 credentials = get_azure_credentials()
 
-auth_provider = AzureProvider(
-    client_id=credentials["FASTMCP_SERVER_AUTH_AZURE_CLIENT_ID"],
-    client_secret=credentials["FASTMCP_SERVER_AUTH_AZURE_CLIENT_SECRET"],
-    tenant_id=credentials["FASTMCP_SERVER_AUTH_AZURE_TENANT_ID"],
-    required_scopes=[
-        "User.Read",
-        "email",
-        "openid",
-        "profile",
-    ],  # Default value, customize if needed
-)
+# auth_provider = AzureProvider(
+#     client_id=credentials["FASTMCP_SERVER_AUTH_AZURE_CLIENT_ID"],
+#     client_secret=credentials["FASTMCP_SERVER_AUTH_AZURE_CLIENT_SECRET"],
+#     tenant_id=credentials["FASTMCP_SERVER_AUTH_AZURE_TENANT_ID"],
+#     required_scopes=[
+#         "User.Read",
+#         "email",
+#         "openid",
+#         "profile",
+#     ],  # Default value, customize if needed
+# )
 
 # Read configuration from environment
 server_name = os.environ.get("MCP_SERVER_NAME", "Remote MCP Server")
 
-mcp = FastMCP(name=server_name, auth=auth_provider)
+# mcp = FastMCP(name=server_name, auth=auth_provider)
+mcp = FastMCP(name=server_name)
 
 
-@mcp.tool
-async def get_user_info() -> dict:
-    """Returns information about the authenticated Azure user."""
-    from fastmcp.server.dependencies import get_access_token
+# @mcp.tool
+# async def get_user_info() -> dict:
+#     """Returns information about the authenticated Azure user."""
+#     from fastmcp.server.dependencies import get_access_token
 
-    token = get_access_token()
-    # The AzureProvider stores user data in token claims
-    return {
-        "azure_id": token.claims.get("sub"),
-        "email": token.claims.get("email"),
-        "name": token.claims.get("name"),
-        "job_title": token.claims.get("job_title"),
-        "office_location": token.claims.get("office_location"),
-    }
+#     token = get_access_token()
+#     # The AzureProvider stores user data in token claims
+#     return {
+#         "azure_id": token.claims.get("sub"),
+#         "email": token.claims.get("email"),
+#         "name": token.claims.get("name"),
+#         "job_title": token.claims.get("job_title"),
+#         "office_location": token.claims.get("office_location"),
+#     }
 
 
 # Example tools
