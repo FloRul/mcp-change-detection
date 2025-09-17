@@ -17,17 +17,17 @@ def get_azure_credentials():
 
 credentials = get_azure_credentials()
 
-# auth_provider = AzureProvider(
-#     client_id=credentials["FASTMCP_SERVER_AUTH_AZURE_CLIENT_ID"],
-#     client_secret=credentials["FASTMCP_SERVER_AUTH_AZURE_CLIENT_SECRET"],
-#     tenant_id=credentials["FASTMCP_SERVER_AUTH_AZURE_TENANT_ID"],
-#     required_scopes=[
-#         "User.Read",
-#         "email",
-#         "openid",
-#         "profile",
-#     ],  # Default value, customize if needed
-# )
+auth_provider = AzureProvider(
+    client_id=credentials["FASTMCP_SERVER_AUTH_AZURE_CLIENT_ID"],
+    client_secret=credentials["FASTMCP_SERVER_AUTH_AZURE_CLIENT_SECRET"],
+    tenant_id=credentials["FASTMCP_SERVER_AUTH_AZURE_TENANT_ID"],
+    required_scopes=[
+        "User.Read",
+        "email",
+        "openid",
+        "profile",
+    ],  # Default value, customize if needed
+)
 
 # Read configuration from environment
 server_name = os.environ.get("MCP_SERVER_NAME", "Remote MCP Server")
